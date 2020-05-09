@@ -1,0 +1,1 @@
+print('Gunpla API of Yuri Lamijo')
