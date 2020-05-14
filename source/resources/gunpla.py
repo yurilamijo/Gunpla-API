@@ -66,7 +66,21 @@ class Gunpla(Resource):
         return gunpla.json(), 201
 
     def put(self, name):
-        pass
+        data = Gunpla.parser.parse_args()
+        gunpla = GunplaModel.find_by_name(name)
+
+        if data is None:
+            gunpla = GunplaModel(name, **data)
+        else:
+            gunpla.model = data['model']
+            gunpla.serie = data['serie']
+            gunpla.grade = data['grade']
+            gunpla.scale = data['scale']
+            gunpla.price = data['price']
+            gunpla.brand = data['brand']
+
+        gunpla.add()
+        return gunpla.json(), 201
 
     def delete(self, name):
         gunpla = GunplaModel.find_by_name(name)
