@@ -66,11 +66,30 @@ class Gunpla(Resource):
         return gunpla.json(), 201
 
     def put(self, name):
-        pass
+        data = Gunpla.parser.parse_args()
+        gunpla = GunplaModel.find_by_name(name)
+
+        if data is None:
+            gunpla = GunplaModel(name, **data)
+        else:
+            gunpla.model = data['model']
+            gunpla.serie = data['serie']
+            gunpla.grade = data['grade']
+            gunpla.scale = data['scale']
+            gunpla.price = data['price']
+            gunpla.brand = data['brand']
+
+        gunpla.add()
+        return gunpla.json(), 201
 
     def delete(self, name):
-        pass
+        gunpla = GunplaModel.find_by_name(name)
+        if gunpla:
+            gunpla.delete()
+            return {'message': f'Gunpla {name} deleted'}
+        return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
+    @jwt_required()
     def get(self):
         return {'gunplas': [gunpla.json() for gunpla in GunplaModel.query.all()]}
