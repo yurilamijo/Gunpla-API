@@ -69,7 +69,11 @@ class Gunpla(Resource):
         pass
 
     def delete(self, name):
-        pass
+        gunpla = GunplaModel.find_by_name(name)
+        if gunpla:
+            gunpla.delete()
+            return {'message': f'Gunpla {name} deleted'}
+        return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
     def get(self):
