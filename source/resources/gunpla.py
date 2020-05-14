@@ -90,5 +90,6 @@ class Gunpla(Resource):
         return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
+    @jwt_required()
     def get(self):
         return {'gunplas': [gunpla.json() for gunpla in GunplaModel.query.all()]}
