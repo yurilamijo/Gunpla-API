@@ -1,11 +1,9 @@
 # Gunpla API
-# Gunpla API
 Project to improve my Python skills.
 API build with Flask-RESTfull
 
 ## Getting Started
 
-### MacOS
 Setup virual enviroment
 ```
 pip install virtualenv
@@ -46,5 +44,3 @@ python app.py
 ## Authors
 
 * **Yuri Lamijo** - *Developer* - [Yuri Lamijo](...)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
