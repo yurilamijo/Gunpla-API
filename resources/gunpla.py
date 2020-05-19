@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, jwt_optional, get_jwt_claims, get_jwt_identity
 
 from models.gunpla import GunplaModel
 
@@ -95,10 +95,13 @@ class Gunpla(Resource):
         return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
-    @jwt_required
+    @jwt_optional
     def get(self):
-        claims = get_jwt_claims()
-        if not claims['is_admin']:
-            return {'message': 'Admin privilege required'}, 401
-
-        return {'gunplas': [gunpla.json() for gunpla in GunplaModel.find_all()]}
+        user_id = get_jwt_identity()
+        gunplas = [gunpla.json() for gunpla in GunplaModel.find_all()]
+        if user_id:
+            return {'gunplas': gunplas}, 200
+        return {
+                'gunplas': [gunpla['name'] for gunpla in gunplas],
+                'message': 'Log in to see more details'
+            }, 200
