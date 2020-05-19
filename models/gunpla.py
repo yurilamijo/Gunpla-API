@@ -27,6 +27,7 @@ class GunplaModel(db.Model):
 
     def json(self):
         return {
+            'id': self.id,
             'name': self.name,
             'model': self.model,
             'serie': self.serie,            
@@ -40,6 +41,10 @@ class GunplaModel(db.Model):
     @classmethod
     def find_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
+
+    @classmethod
+    def find_all(cls):
+        return cls.query.all()
 
     def add(self):
         try:

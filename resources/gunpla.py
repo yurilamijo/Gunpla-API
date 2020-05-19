@@ -1,5 +1,5 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
+from flask_jwt_extended import jwt_required
 
 from models.gunpla import GunplaModel
 
@@ -82,7 +82,12 @@ class Gunpla(Resource):
         gunpla.add()
         return gunpla.json(), 201
 
+    @jwt_required
     def delete(self, name):
+        claims = get_jwt_claims()
+        if not claims['is_admin']:
+            return {'message': 'Admin privilege required'}, 401
+
         gunpla = GunplaModel.find_by_name(name)
         if gunpla:
             gunpla.delete()
@@ -90,6 +95,10 @@ class Gunpla(Resource):
         return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
-    @jwt_required()
+    @jwt_required
     def get(self):
-        return {'gunplas': [gunpla.json() for gunpla in GunplaModel.query.all()]}
+        claims = get_jwt_claims()
+        if not claims['is_admin']:
+            return {'message': 'Admin privilege required'}, 401
+
+        return {'gunplas': [gunpla.json() for gunpla in GunplaModel.find_all()]}
