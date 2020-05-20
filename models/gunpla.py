@@ -1,6 +1,5 @@
 from db import db
 
-
 class GunplaModel(db.Model):
     __tablename__ = 'gunplas'
 
@@ -39,8 +38,16 @@ class GunplaModel(db.Model):
         }
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str):
         return cls.query.filter_by(name=name).first()
+
+    @classmethod
+    def find_by_model(cls, model: str):
+        return cls.query.filter_by(model=model).all()
+    
+    @classmethod
+    def find_by_serie(cls, serie: str):
+        return cls.query.filter_by(serie=serie).all()
 
     @classmethod
     def find_all(cls):
