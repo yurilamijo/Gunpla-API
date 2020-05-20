@@ -19,10 +19,10 @@ class Gunpla(Resource):
         type=str
     )    
     parser.add_argument(
-        'serie',
+        'serie_id',
         help='This field cannot be empty',
         required=True,
-        type=str
+        type=int
     )    
     parser.add_argument(
         'grade',
@@ -61,7 +61,6 @@ class Gunpla(Resource):
             return gunpla.json(), 201
         return {'message': 'Gunpla not found'}, 404
 
-    @fresh_jwt_required
     def post(self, name: str):
         if GunplaModel.find_by_name(name):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
@@ -80,7 +79,7 @@ class Gunpla(Resource):
             gunpla = GunplaModel(name, **data)
         else:
             gunpla.model = data['model']
-            gunpla.serie = data['serie']
+            gunpla.serie_id = data['serie_id']
             gunpla.grade = data['grade']
             gunpla.scale = data['scale']
             gunpla.price = data['price']

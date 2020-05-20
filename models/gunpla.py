@@ -6,18 +6,20 @@ class GunplaModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(225))
     model = db.Column(db.String(80))
-    serie = db.Column(db.String(100))
     grade = db.Column(db.String(20))
     scale = db.Column(db.String(20))
     price = db.Column(db.Float(precision=2))
     release_date = db.Column(db.DateTime())
     brand = db.Column(db.String(40))
 
-    def __init__(self, name, model, serie, grade,
+    serie_id = db.Column(db.Integer, db.ForeignKey('series.id'))
+    serie = db.relationship('SerieModel')
+
+    def __init__(self, name, model, serie_id, grade,
                  scale, price, release_date, brand):
         self.name = name
         self.model = model
-        self.serie = serie
+        self.serie_id = serie_id
         self.grade = grade
         self.scale = scale
         self.price = price
@@ -29,7 +31,8 @@ class GunplaModel(db.Model):
             'id': self.id,
             'name': self.name,
             'model': self.model,
-            'serie': self.serie,            
+            'serie_id': self.serie_id,         
+            'serie': self.serie.name,         
             'grade': self.grade,
             'scale': self.scale,
             'price': self.price,
@@ -46,8 +49,8 @@ class GunplaModel(db.Model):
         return cls.query.filter_by(model=model).all()
     
     @classmethod
-    def find_by_serie(cls, serie: str):
-        return cls.query.filter_by(serie=serie).all()
+    def find_by_serie(cls, serie_id: int):
+        return cls.query.filter_by(serie_id=serie_id).all()
 
     @classmethod
     def find_all(cls):
