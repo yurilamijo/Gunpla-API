@@ -1,5 +1,11 @@
 from flask_restful import Resource, reqparse
-from flask_jwt_extended import jwt_required, jwt_optional, get_jwt_claims, get_jwt_identity
+from flask_jwt_extended import (
+        jwt_required, 
+        jwt_optional, 
+        get_jwt_claims,
+        get_jwt_identity, 
+        fresh_jwt_required
+    )
 
 from models.gunpla import GunplaModel
 
@@ -55,6 +61,7 @@ class Gunpla(Resource):
             return gunpla.json(), 201
         return {'message': 'Gunpla not found'}, 404
 
+    @fresh_jwt_required
     def post(self, name):
         if GunplaModel.find_by_name(name):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
