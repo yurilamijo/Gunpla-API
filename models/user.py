@@ -11,12 +11,25 @@ class UserModel(db.Model):
         self.username = username
         self.password = password
     
+    def json(self):
+        return {
+            'id': self.id,
+            'username': self.username
+        }
+
     def save_to_db(self):
         try:
             db.session.add(self)
             db.session.commit()
         except:
             return {'message': 'An error occurred while creating the user'}, 500
+
+    def delete_from_db(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except:
+            return {'message': 'An error occurred while deleting the user'}, 500
 
     @classmethod
     def find_by_username(cls, username):

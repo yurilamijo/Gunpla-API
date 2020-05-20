@@ -1,5 +1,11 @@
 from flask_restful import Resource, reqparse
-from flask_jwt import jwt_required
+from flask_jwt_extended import (
+        jwt_required, 
+        jwt_optional, 
+        get_jwt_claims,
+        get_jwt_identity, 
+        fresh_jwt_required
+    )
 
 from models.gunpla import GunplaModel
 
@@ -13,10 +19,10 @@ class Gunpla(Resource):
         type=str
     )    
     parser.add_argument(
-        'serie',
+        'serie_id',
         help='This field cannot be empty',
         required=True,
-        type=str
+        type=int
     )    
     parser.add_argument(
         'grade',
@@ -49,13 +55,13 @@ class Gunpla(Resource):
         type=str
     )    
 
-    def get(self, name):
+    def get(self, name: str):
         gunpla = GunplaModel.find_by_name(name)
         if gunpla:
             return gunpla.json(), 201
         return {'message': 'Gunpla not found'}, 404
 
-    def post(self, name):
+    def post(self, name: str):
         if GunplaModel.find_by_name(name):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
         
@@ -65,7 +71,7 @@ class Gunpla(Resource):
 
         return gunpla.json(), 201
 
-    def put(self, name):
+    def put(self, name: str):
         data = Gunpla.parser.parse_args()
         gunpla = GunplaModel.find_by_name(name)
 
@@ -73,7 +79,7 @@ class Gunpla(Resource):
             gunpla = GunplaModel(name, **data)
         else:
             gunpla.model = data['model']
-            gunpla.serie = data['serie']
+            gunpla.serie_id = data['serie_id']
             gunpla.grade = data['grade']
             gunpla.scale = data['scale']
             gunpla.price = data['price']
@@ -82,7 +88,12 @@ class Gunpla(Resource):
         gunpla.add()
         return gunpla.json(), 201
 
-    def delete(self, name):
+    @jwt_required
+    def delete(self, name: str):
+        claims = get_jwt_claims()
+        if not claims['is_admin']:
+            return {'message': 'Admin privilege required'}, 401
+
         gunpla = GunplaModel.find_by_name(name)
         if gunpla:
             gunpla.delete()
@@ -90,6 +101,13 @@ class Gunpla(Resource):
         return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
-    @jwt_required()
+    @jwt_optional
     def get(self):
-        return {'gunplas': [gunpla.json() for gunpla in GunplaModel.query.all()]}
+        user_id = get_jwt_identity()
+        gunplas = [gunpla.json() for gunpla in GunplaModel.find_all()]
+        if user_id:
+            return {'gunplas': gunplas}, 200
+        return {
+                'gunplas': [gunpla['name'] for gunpla in gunplas],
+                'message': 'Log in to see more details'
+            }, 200

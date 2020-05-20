@@ -1,6 +1,6 @@
 # Gunpla API
 Project to improve my Python skills.
-API build with Flask-RESTfull
+API build with Flask-RESTfull. Launched in Heruko.
 
 ## Getting Started
 
@@ -19,7 +19,7 @@ source ./venv/bin/activate
 
 Install packages
 ```
-pip freeze > .\requirements.txt
+pip install -r requirements.txt
 ```
 
 Run it
@@ -28,18 +28,22 @@ python app.py
 ```
 
 ## Built With
-
 * [Pyton 3.7.3](https://www.python.org/) - Programming lanuage
 
 ### Python packages
-*   autopep8 1.5.2
-*   Flask 1.1.2
-*   Flask-JWT 0.3.2
-*   Flask-RESTful 0.3.8
-*   Flask-SQLAlchemy 2.4.1
-*   PyJWT 1.4.2
-*   pylint 2.5.2
-*   SQLAlchemy 1.3.16
+*   autopep8 
+*   Flask 
+*   Flask-JWT 
+*   Flask-RESTful 
+*   Flask-SQLAlchemy 
+*   PyJWT-Extended 
+*   pylint 
+*   SQLAlchemy 
+
+### Tools
+* Heruko
+* Postman
+* Cloudflare
 
 ## Authors
 
