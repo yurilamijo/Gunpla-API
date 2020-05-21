@@ -1,5 +1,5 @@
-from werkzeug.security import safe_str_cmp
-from flask_restful import Resource, reqparse
+from flask import request
+from flask_restful import Resource
 from flask_jwt_extended import (
         create_access_token, 
         create_refresh_token, 
@@ -8,34 +8,27 @@ from flask_jwt_extended import (
         jwt_required,
         get_raw_jwt
     )
+from werkzeug.security import safe_str_cmp
+from marshmallow import ValidationError
+
+from schemas.user import UserSchema
 from models.user import UserModel
 from constant_msg import EMPTY, NOT_EMPTY
 from blacklist import BLACKLIST
 
-_user_parser = reqparse.RequestParser()
-_user_parser.add_argument(
-    'username',
-    type=str,
-    required=True,
-    help=NOT_EMPTY.format('username')
-)
-
-_user_parser.add_argument(
-    'password',
-    type=str,
-    required=True,
-    help=NOT_EMPTY.format('password')
-)
+user_schema = UserSchema()
 
 class UserRegister(Resource):
     @classmethod
     def post(cls):
-        data = _user_parser.parse_args()
+        try:
+            user = user_schema.load(request.get_json())
+        except ValidationError as e:
+            return e.messages, 400
 
-        if UserModel.find_by_username(data['username']):
+        if UserModel.find_by_username(user.username):
             return {'message': 'A user with this username already exists'}, 400
         
-        user = UserModel(**data)
         user.save_to_db()
 
         return {'message': 'User created succesfully'}, 201
@@ -46,7 +39,7 @@ class User(Resource):
         user = UserModel.find_by_id(user_id)
         if not user:
             return {'message': 'User not found'}, 404
-        return user.json(), 200
+        return user_schema.dump(user), 200
 
     @classmethod
     def delete(cls, user_id: int):
@@ -59,13 +52,14 @@ class User(Resource):
 class UserLogin(Resource):
     @classmethod
     def post(cls):
-        data = _user_parser.parse_args()
+        try:
+            user_data = user_schema.load(request.get_json())
+        except ValidationError as e:
+            return e.messages, 400
         
-        user = UserModel.find_by_username(data['username'])
+        user = UserModel.find_by_username(user_data.username)
 
-        # this is what the `authenticate()` function did in security.py
-        if user and safe_str_cmp(user.password, data['password']):
-            # identity= is what the identity() function did in security.py—now stored in the JWT
+        if user and safe_str_cmp(user.password, user_data.password):
             access_token = create_access_token(identity=user.id, fresh=True) 
             refresh_token = create_refresh_token(user.id)
             return {

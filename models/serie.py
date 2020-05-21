@@ -1,37 +1,20 @@
-from typing import List, Dict
+from typing import List
 from db import db
 
 class SerieModel(db.Model):
     __tablename__ = 'series'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(225), unique=True)
-    type = db.Column(db.String(20))
-    premiered = db.Column(db.String(50))
-    studio = db.Column(db.String(100))
+    name = db.Column(db.String(225), nullable=False, unique=True)
+    type = db.Column(db.String(20), nullable=False)
+    premiered = db.Column(db.String(50), nullable=False)
+    studio = db.Column(db.String(100), nullable=False)
 
     gunplas = db.relationship('GunplaModel', lazy='dynamic')
-
-    def __init__(self, name: str, type: str, premiered: str, studio: str):
-        self.name = name
-        self.type = type
-        self.premiered = premiered
-        self.studio = studio
-    
-    def json(self) -> Dict:
-        return {
-            'id': self.id,
-            'name': self.name,
-            'type': self.type,
-            'premiered': self.premiered,
-            'studio': self.studio,
-            'gunplas': [gunpla.json() for gunpla in self.gunplas.all()]
-        }
 
     @classmethod
     def find_by_name(cls, name: str) -> "SerieModel":
         return cls.query.filter_by(name=name).first()
-
 
     @classmethod 
     def find_all(cls) -> List["SerieModel"]:

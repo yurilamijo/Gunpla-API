@@ -1,45 +1,21 @@
-from typing import List, Dict
+from typing import List
+
 from db import db
 
 class GunplaModel(db.Model):
     __tablename__ = 'gunplas'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(225), unique=True)
-    model = db.Column(db.String(80))
-    grade = db.Column(db.String(20))
-    scale = db.Column(db.String(20))
-    price = db.Column(db.Float(precision=2))
-    release_date = db.Column(db.DateTime())
-    brand = db.Column(db.String(40))
+    name = db.Column(db.String(225), nullable=False, unique=True)
+    model = db.Column(db.String(80), nullable=False)
+    grade = db.Column(db.String(20), nullable=False)
+    scale = db.Column(db.String(20), nullable=True)
+    price = db.Column(db.Float(precision=2), nullable=False)
+    release_date = db.Column(db.DateTime(), nullable=True)
+    brand = db.Column(db.String(40), nullable=True)
 
-    serie_id = db.Column(db.Integer, db.ForeignKey('series.id'))
+    serie_id = db.Column(db.Integer, db.ForeignKey('series.id'), nullable=False)
     serie = db.relationship('SerieModel')
-
-    def __init__(self, name: str, model: str, serie_id: int, grade: str,
-                 scale: str, price: float, release_date, brand: str):
-        self.name = name
-        self.model = model
-        self.serie_id = serie_id
-        self.grade = grade
-        self.scale = scale
-        self.price = price
-        self.release_date = release_date
-        self.brand = brand
-
-    def json(self) -> Dict:
-        return {
-            'id': self.id,
-            'name': self.name,
-            'model': self.model,
-            'serie_id': self.serie_id,         
-            'serie': self.serie.name,         
-            'grade': self.grade,
-            'scale': self.scale,
-            'price': self.price,
-            'release_date': self.release_date,
-            'brand': self.brand
-        }
 
     @classmethod
     def find_by_name(cls, name: str) -> "GunplaModel":

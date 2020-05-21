@@ -1,4 +1,5 @@
-from flask_restful import Resource, reqparse
+from flask import request
+from flask_restful import Resource
 from flask_jwt_extended import (
         jwt_required, 
         jwt_optional, 
@@ -6,60 +7,22 @@ from flask_jwt_extended import (
         get_jwt_identity, 
         fresh_jwt_required
     )
+from marshmallow import ValidationError
 
+from schemas.gunpla import GunplaSchema
 from models.gunpla import GunplaModel
-from constant_msg import EMPTY, NOT_EMPTY
+# from constant_msg import EMPTY, NOT_EMPTY
+
+gunpla_schema = GunplaSchema()
+gunpla_list_schema = GunplaSchema(many=True)
 
 class Gunpla(Resource):
-    parser = reqparse.RequestParser()
-    parser.add_argument(
-        'model',
-        help=NOT_EMPTY.format('model'),
-        required=True,
-        type=str
-    )    
-    parser.add_argument(
-        'serie_id',
-        help=NOT_EMPTY.format('serie_id'),
-        required=True,
-        type=int
-    )    
-    parser.add_argument(
-        'grade',
-        help=NOT_EMPTY.format('grade'),
-        required=True,
-        type=str
-    )
-    parser.add_argument(
-        'scale',
-        help=EMPTY.format('scale'),
-        required=False,
-        type=str
-    )    
-    parser.add_argument(
-        'price',
-        help=NOT_EMPTY.format('price'),
-        required=True,
-        type=float
-    )
-    parser.add_argument(
-        'release_date',
-        help=EMPTY.format('release_date'),
-        required=False,
-        type=lambda x: datetime.strptime(x,'%Y-%m-%dT%H:%M:%S')
-    )    
-    parser.add_argument(
-        'brand',
-        help=EMPTY.format('brand'),
-        required=False,
-        type=str
-    )    
-
+   
     @classmethod
     def get(cls, name: str):
         gunpla = GunplaModel.find_by_name(name)
         if gunpla:
-            return gunpla.json(), 201
+            return gunpla_schema.dump(gunpla), 201
         return {'message': 'Gunpla not found'}, 404
 
     @classmethod
@@ -67,29 +30,39 @@ class Gunpla(Resource):
         if GunplaModel.find_by_name(name):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
         
-        data = Gunpla.parser.parse_args()
-        gunpla = GunplaModel(name, **data)
+        gunpla_json = request.json()
+        gunpla_json['name'] = name
+
+        try:
+            gunpla = gunpla_schema.load(gunpla_json)
+        except ValidationError as e:
+            return e.messages, 400
         gunpla.add()
 
-        return gunpla.json(), 201
+        return gunpla_schema.dump(gunpla), 201
 
     @classmethod
     def put(cls, name: str):
-        data = Gunpla.parser.parse_args()
+        gunpla_json = request.json()
         gunpla = GunplaModel.find_by_name(name)
 
-        if data is None:
-            gunpla = GunplaModel(name, **data)
+        if gunpla is None:
+            gunpla_json['name'] = name
+
+            try:
+                gunpla = gunpla_schema.load(gunpla_json)
+            except ValidationError as e:
+                return e.messages, 400
         else:
-            gunpla.model = data['model']
-            gunpla.serie_id = data['serie_id']
-            gunpla.grade = data['grade']
-            gunpla.scale = data['scale']
-            gunpla.price = data['price']
-            gunpla.brand = data['brand']
+            gunpla.model = gunpla_json['model']
+            gunpla.serie_id = gunpla_json['serie_id']
+            gunpla.grade = gunpla_json['grade']
+            gunpla.scale = gunpla_json['scale']
+            gunpla.price = gunpla_json['price']
+            gunpla.brand = gunpla_json['brand']
 
         gunpla.add()
-        return gunpla.json(), 201
+        return gunpla_schema.dump(gunpla), 201
 
     @classmethod
     @jwt_required
@@ -109,7 +82,7 @@ class GunplaList(Resource):
     @jwt_optional
     def get(cls):
         user_id = get_jwt_identity()
-        gunplas = [gunpla.json() for gunpla in GunplaModel.find_all()]
+        gunplas = gunpla_list_schema.dump(GunplaModel.find_all())
         if user_id:
             return {'gunplas': gunplas}, 200
         return {

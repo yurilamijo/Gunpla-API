@@ -2,6 +2,7 @@ from db import db
 from flask import Flask, jsonify
 from flask_restful import Api
 
+from ma import ma
 from jwt_config import jwt_init
 from resources.gunpla import Gunpla, GunplaList
 from resources.serie import Serie, SerieList
@@ -32,4 +33,5 @@ api.add_resource(SerieList, '/series')
 
 if __name__ == '__main__':
     db.init_app(app)
+    ma.init_app(app)
     app.run(debug=True)
