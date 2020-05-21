@@ -1,7 +1,7 @@
 # Gunpla API
 Project to improve my Python skills.<br>
 API build with Flask-RESTfull.
-Database build with sqlite3 and postgresql<br>
+Database build with sqlite3 and postgresql.<br>
 Launched in Heruko.
 
 ## Getting Started
@@ -32,16 +32,16 @@ python app.py
 ## API calls
 Gunpla
 *   GET     http://127.0.0.1:5000/gunplas
-*   GET     http://127.0.0.1:5000/gunpla/<name>
-*   POST    http://127.0.0.1:5000/gunpla/<name>
-*   PUT     http://127.0.0.1:5000/gunpla/<name>
-*   DELETE  http://127.0.0.1:5000/gunpla/<name>
+*   GET     http://127.0.0.1:5000/gunpla/{name}
+*   POST    http://127.0.0.1:5000/gunpla/{name}
+*   PUT     http://127.0.0.1:5000/gunpla/{name}
+*   DELETE  http://127.0.0.1:5000/gunpla/{name}
 
 Serie
 *   GET     http://127.0.0.1:5000/series
-*   GET     http://127.0.0.1:5000/series/<name>
-*   POST    http://127.0.0.1:5000/series/<name>
-*   DELETE  http://127.0.0.1:5000/series/<name>
+*   GET     http://127.0.0.1:5000/series/{name}
+*   POST    http://127.0.0.1:5000/series/{name}
+*   DELETE  http://127.0.0.1:5000/series/{name}
 
 User
 *   POST    http://127.0.0.1:5000/login
