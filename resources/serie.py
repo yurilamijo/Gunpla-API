@@ -31,13 +31,15 @@ class Serie(Resource):
         help=NOT_EMPTY.format('studio')
     )
 
-    def get(self, name: str):
+    @classmethod
+    def get(cls, name: str):
         serie = SerieModel.find_by_name(name)
         if serie:
             return serie.json(), 201
         return {'message': 'Serie not found'}, 404
-
-    def post(self, name: str):
+    
+    @classmethod
+    def post(cls, name: str):
         if SerieModel.find_by_name(name):
             return {'message': f'An Serie with the name {name} already exists'}, 400
         
@@ -47,8 +49,9 @@ class Serie(Resource):
 
         return serie.json(), 201
 
+    @classmethod
     @jwt_required
-    def delete(self, name:str):
+    def delete(cls, name:str):
         claims = get_jwt_claims()
         if not claims['is_admin']:
             return {'message': 'Admin privilege required'}, 401
@@ -60,8 +63,9 @@ class Serie(Resource):
         return {'message': f"The serie {name} doesn't exist"}
 
 class SerieList(Resource):
+    @classmethod
     @jwt_optional
-    def get(self):
+    def get(cls):
         user_id = get_jwt_identity()
         series = [serie.json() for serie in SerieModel.find_all()]
         if user_id:

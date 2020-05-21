@@ -55,13 +55,15 @@ class Gunpla(Resource):
         type=str
     )    
 
-    def get(self, name: str):
+    @classmethod
+    def get(cls, name: str):
         gunpla = GunplaModel.find_by_name(name)
         if gunpla:
             return gunpla.json(), 201
         return {'message': 'Gunpla not found'}, 404
 
-    def post(self, name: str):
+    @classmethod
+    def post(cls, name: str):
         if GunplaModel.find_by_name(name):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
         
@@ -71,7 +73,8 @@ class Gunpla(Resource):
 
         return gunpla.json(), 201
 
-    def put(self, name: str):
+    @classmethod
+    def put(cls, name: str):
         data = Gunpla.parser.parse_args()
         gunpla = GunplaModel.find_by_name(name)
 
@@ -88,8 +91,9 @@ class Gunpla(Resource):
         gunpla.add()
         return gunpla.json(), 201
 
+    @classmethod
     @jwt_required
-    def delete(self, name: str):
+    def delete(cls, name: str):
         claims = get_jwt_claims()
         if not claims['is_admin']:
             return {'message': 'Admin privilege required'}, 401
@@ -101,8 +105,9 @@ class Gunpla(Resource):
         return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
 class GunplaList(Resource):
+    @classmethod
     @jwt_optional
-    def get(self):
+    def get(cls):
         user_id = get_jwt_identity()
         gunplas = [gunpla.json() for gunpla in GunplaModel.find_all()]
         if user_id:
