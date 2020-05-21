@@ -1,3 +1,4 @@
+from typing import Dict
 from db import db
 
 class UserModel(db.Model):
@@ -7,11 +8,11 @@ class UserModel(db.Model):
     username = db.Column(db.String(80))
     password = db.Column(db.String(120))
 
-    def __init__(self, username, password):
+    def __init__(self, username: str, password: str):
         self.username = username
         self.password = password
     
-    def json(self):
+    def json(self) -> Dict:
         return {
             'id': self.id,
             'username': self.username

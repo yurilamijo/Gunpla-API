@@ -1,10 +1,11 @@
+from typing import List, Dict
 from db import db
 
 class GunplaModel(db.Model):
     __tablename__ = 'gunplas'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(225))
+    name = db.Column(db.String(225), unique=True)
     model = db.Column(db.String(80))
     grade = db.Column(db.String(20))
     scale = db.Column(db.String(20))
@@ -15,8 +16,8 @@ class GunplaModel(db.Model):
     serie_id = db.Column(db.Integer, db.ForeignKey('series.id'))
     serie = db.relationship('SerieModel')
 
-    def __init__(self, name, model, serie_id, grade,
-                 scale, price, release_date, brand):
+    def __init__(self, name: str, model: str, serie_id: int, grade: str,
+                 scale: str, price: float, release_date, brand: str):
         self.name = name
         self.model = model
         self.serie_id = serie_id
@@ -26,7 +27,7 @@ class GunplaModel(db.Model):
         self.release_date = release_date
         self.brand = brand
 
-    def json(self):
+    def json(self) -> Dict:
         return {
             'id': self.id,
             'name': self.name,
@@ -53,7 +54,7 @@ class GunplaModel(db.Model):
         return cls.query.filter_by(serie_id=serie_id).all()
 
     @classmethod
-    def find_all(cls):
+    def find_all(cls) -> List:
         return cls.query.all()
 
     def add(self):
