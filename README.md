@@ -1,6 +1,8 @@
 # Gunpla API
-Project to improve my Python skills.
-API build with Flask-RESTfull. Launched in Heruko.
+Project to improve my Python skills.<br>
+API build with Flask-RESTfull.
+Database build with sqlite3 and postgresql<br>
+Launched in Heruko.
 
 ## Getting Started
 
@@ -26,6 +28,26 @@ Run it
 ```
 python app.py
 ```
+
+## API calls
+Gunpla
+*   GET     http://127.0.0.1:5000/gunplas
+*   GET     http://127.0.0.1:5000/gunpla/<name>
+*   POST    http://127.0.0.1:5000/gunpla/<name>
+*   PUT     http://127.0.0.1:5000/gunpla/<name>
+*   DELETE  http://127.0.0.1:5000/gunpla/<name>
+
+Serie
+*   GET     http://127.0.0.1:5000/series
+*   GET     http://127.0.0.1:5000/series/<name>
+*   POST    http://127.0.0.1:5000/series/<name>
+*   DELETE  http://127.0.0.1:5000/series/<name>
+
+User
+*   POST    http://127.0.0.1:5000/login
+*   POST    http://127.0.0.1:5000/logout
+*   POST    http://127.0.0.1:5000/refresh
+*   POST    http://127.0.0.1:5000/register
 
 ## Built With
 * [Pyton 3.7.3](https://www.python.org/) - Programming lanuage
