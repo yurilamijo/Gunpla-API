@@ -1,3 +1,4 @@
+from flask import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
         jwt_optional, 
@@ -5,49 +6,37 @@ from flask_jwt_extended import (
         get_jwt_claims, 
         get_jwt_identity
     )
+from marshmallow import ValidationError
+
+from schemas.serie import SerieSchema
 from models.serie import SerieModel
+
+serie_schema = SerieSchema()
+serie_list_schema = SerieSchema(many=True)
 
 class Serie(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument(
-        'type',
-        type=str,
-        required=True, 
-        help='This field cannot be empty'
-    )
 
-    parser.add_argument(
-        'premiered',
-        type=str,
-        required=True, 
-        help='This field cannot be empty'
-    )
-
-    parser.add_argument(
-        'studio',
-        type=str,
-        required=True, 
-        help='This field cannot be empty'
-    )
-
-    def get(self, name: str):
+    @classmethod
+    def get(cls, name: str):
         serie = SerieModel.find_by_name(name)
         if serie:
-            return serie.json(), 201
+            return serie_schema.dump(serie), 201
         return {'message': 'Serie not found'}, 404
-
-    def post(self, name: str):
+    
+    @classmethod
+    def post(cls, name: str):
         if SerieModel.find_by_name(name):
             return {'message': f'An Serie with the name {name} already exists'}, 400
         
-        data = Serie.parser.parse_args()
-        serie = SerieModel(name, **data)
+        serie = SerieModel(name=name)
         serie.add()
 
-        return serie.json(), 201
+        return serie_schema.dump(serie), 201
 
+    @classmethod
     @jwt_required
-    def delete(self, name:str):
+    def delete(cls, name:str):
         claims = get_jwt_claims()
         if not claims['is_admin']:
             return {'message': 'Admin privilege required'}, 401
@@ -59,10 +48,11 @@ class Serie(Resource):
         return {'message': f"The serie {name} doesn't exist"}
 
 class SerieList(Resource):
+    @classmethod
     @jwt_optional
-    def get(self):
+    def get(cls):
         user_id = get_jwt_identity()
-        series = [serie.json() for serie in SerieModel.find_all()]
+        series = serie_list_schema.dump(SerieModel.find_all())
         if user_id:
             return {'series': series}, 200
         return {

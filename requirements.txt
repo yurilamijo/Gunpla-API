@@ -2,5 +2,8 @@ Flask
 Flask-RESTful
 Flask-JWT-Extended
 FLask-SQLAlchemy
+flask-marshmallow
 uwsgi
 psycopg2
+marshmallow
+marshmallow-sqlalchemy

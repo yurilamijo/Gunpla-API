@@ -1,21 +1,15 @@
-import os
-
 from db import db
 from flask import Flask, jsonify
 from flask_restful import Api
 
+from ma import ma
 from jwt_config import jwt_init
 from resources.gunpla import Gunpla, GunplaList
 from resources.serie import Serie, SerieList
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data.db')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['PROPAGATE_EXCEPTIONS'] = True
-app.config['JWT_BLACKLIST_ENABLED'] = True
-app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
-app.secret_key = 'yuri'
+app.config.from_pyfile('config.py')
 api = Api(app)
 
 @app.before_first_request
@@ -39,4 +33,5 @@ api.add_resource(SerieList, '/series')
 
 if __name__ == '__main__':
     db.init_app(app)
+    ma.init_app(app)
     app.run(debug=True)
