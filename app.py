@@ -1,9 +1,9 @@
-from db import db
+from config.db import db
 from flask import Flask, jsonify
 from flask_restful import Api
 
-from ma import ma
-from jwt_config import jwt_init
+from config.ma import ma
+from config.jwt_config import jwt_init
 from resources.gunpla import Gunpla, GunplaList
 from resources.serie import Serie, SerieList
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh

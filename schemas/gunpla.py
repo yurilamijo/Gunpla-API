@@ -1,4 +1,4 @@
-from ma import ma
+from config.ma import ma
 
 from models.gunpla import GunplaModel
 from models.serie import SerieModel

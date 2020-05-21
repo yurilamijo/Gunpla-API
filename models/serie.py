@@ -1,5 +1,5 @@
 from typing import List
-from db import db
+from config.db import db
 
 class SerieModel(db.Model):
     __tablename__ = 'series'

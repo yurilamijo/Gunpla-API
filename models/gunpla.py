@@ -1,6 +1,6 @@
 from typing import List
 
-from db import db
+from config.db import db
 
 class GunplaModel(db.Model):
     __tablename__ = 'gunplas'

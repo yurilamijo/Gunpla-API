@@ -1,7 +1,7 @@
 from flask import jsonify
 from flask_jwt_extended import JWTManager
 
-from blacklist import BLACKLIST
+from config.blacklist import BLACKLIST
 
 def jwt_init(app):
     jwt = JWTManager(app)

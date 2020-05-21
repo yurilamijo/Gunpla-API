@@ -1,5 +1,5 @@
 from typing import Dict
-from db import db
+from config.db import db
 
 class UserModel(db.Model):
     __tablename__ = 'users'

@@ -13,8 +13,7 @@ from marshmallow import ValidationError
 
 from schemas.user import UserSchema
 from models.user import UserModel
-from constant_msg import EMPTY, NOT_EMPTY
-from blacklist import BLACKLIST
+from config.blacklist import BLACKLIST
 
 user_schema = UserSchema()
 

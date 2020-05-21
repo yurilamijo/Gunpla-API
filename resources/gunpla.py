@@ -11,7 +11,6 @@ from marshmallow import ValidationError
 
 from schemas.gunpla import GunplaSchema
 from models.gunpla import GunplaModel
-# from constant_msg import EMPTY, NOT_EMPTY
 
 gunpla_schema = GunplaSchema()
 gunpla_list_schema = GunplaSchema(many=True)
