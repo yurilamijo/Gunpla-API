@@ -33,9 +33,9 @@ class UserModel(db.Model):
             return {'message': 'An error occurred while deleting the user'}, 500
 
     @classmethod
-    def find_by_username(cls, username):
+    def find_by_username(cls, username) -> "UserModel":
         return cls.query.filter_by(username=username).first()
 
     @classmethod
-    def find_by_id(cls, _id):
+    def find_by_id(cls, _id) -> "UserModel":
         return cls.query.filter_by(id=_id).first()

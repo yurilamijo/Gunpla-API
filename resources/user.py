@@ -9,6 +9,7 @@ from flask_jwt_extended import (
         get_raw_jwt
     )
 from models.user import UserModel
+from constant_msg import EMPTY, NOT_EMPTY
 from blacklist import BLACKLIST
 
 _user_parser = reqparse.RequestParser()
@@ -16,14 +17,14 @@ _user_parser.add_argument(
     'username',
     type=str,
     required=True,
-    help='This field is required'
+    help=NOT_EMPTY.format('username')
 )
 
 _user_parser.add_argument(
     'password',
     type=str,
     required=True,
-    help='This field is required'
+    help=NOT_EMPTY.format('password')
 )
 
 class UserRegister(Resource):

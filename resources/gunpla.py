@@ -8,49 +8,49 @@ from flask_jwt_extended import (
     )
 
 from models.gunpla import GunplaModel
-
+from constant_msg import EMPTY, NOT_EMPTY
 
 class Gunpla(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument(
         'model',
-        help='This field cannot be empty',
+        help=NOT_EMPTY.format('model'),
         required=True,
         type=str
     )    
     parser.add_argument(
         'serie_id',
-        help='This field cannot be empty',
+        help=NOT_EMPTY.format('serie_id'),
         required=True,
         type=int
     )    
     parser.add_argument(
         'grade',
-        help='This field cannot be empty',
+        help=NOT_EMPTY.format('grade'),
         required=True,
         type=str
     )
     parser.add_argument(
         'scale',
-        help='This can be empty',
+        help=EMPTY.format('scale'),
         required=False,
         type=str
     )    
     parser.add_argument(
         'price',
-        help='This field cannot be empty',
+        help=NOT_EMPTY.format('price'),
         required=True,
         type=float
     )
     parser.add_argument(
         'release_date',
-        help='This can be empty',
+        help=EMPTY.format('release_date'),
         required=False,
         type=lambda x: datetime.strptime(x,'%Y-%m-%dT%H:%M:%S')
     )    
     parser.add_argument(
         'brand',
-        help='This can be empty',
+        help=EMPTY.format('brand'),
         required=False,
         type=str
     )    

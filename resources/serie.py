@@ -6,6 +6,7 @@ from flask_jwt_extended import (
         get_jwt_identity
     )
 from models.serie import SerieModel
+from constant_msg import EMPTY, NOT_EMPTY
 
 class Serie(Resource):
     parser = reqparse.RequestParser()
@@ -13,21 +14,21 @@ class Serie(Resource):
         'type',
         type=str,
         required=True, 
-        help='This field cannot be empty'
+        help=NOT_EMPTY.format('type')
     )
 
     parser.add_argument(
         'premiered',
         type=str,
         required=True, 
-        help='This field cannot be empty'
+        help=NOT_EMPTY.format('premiered')
     )
 
     parser.add_argument(
         'studio',
         type=str,
         required=True, 
-        help='This field cannot be empty'
+        help=NOT_EMPTY.format('studio')
     )
 
     def get(self, name: str):

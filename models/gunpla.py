@@ -42,19 +42,19 @@ class GunplaModel(db.Model):
         }
 
     @classmethod
-    def find_by_name(cls, name: str):
+    def find_by_name(cls, name: str) -> "GunplaModel":
         return cls.query.filter_by(name=name).first()
 
     @classmethod
-    def find_by_model(cls, model: str):
+    def find_by_model(cls, model: str) -> List["GunplaModel"]:
         return cls.query.filter_by(model=model).all()
     
     @classmethod
-    def find_by_serie(cls, serie_id: int):
+    def find_by_serie(cls, serie_id: int) -> List["GunplaModel"]:
         return cls.query.filter_by(serie_id=serie_id).all()
 
     @classmethod
-    def find_all(cls) -> List:
+    def find_all(cls) -> List["GunplaModel"]:
         return cls.query.all()
 
     def add(self):
