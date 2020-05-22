@@ -7,7 +7,6 @@ from flask_jwt_extended import (
         get_jwt_identity, 
         fresh_jwt_required
     )
-from marshmallow import ValidationError
 
 from schemas.gunpla import GunplaSchema
 from models.gunpla import GunplaModel
@@ -32,10 +31,7 @@ class Gunpla(Resource):
         gunpla_json = request.json()
         gunpla_json['name'] = name
 
-        try:
-            gunpla = gunpla_schema.load(gunpla_json)
-        except ValidationError as e:
-            return e.messages, 400
+        gunpla = gunpla_schema.load(gunpla_json)
         gunpla.add()
 
         return gunpla_schema.dump(gunpla), 201
@@ -47,11 +43,7 @@ class Gunpla(Resource):
 
         if gunpla is None:
             gunpla_json['name'] = name
-
-            try:
-                gunpla = gunpla_schema.load(gunpla_json)
-            except ValidationError as e:
-                return e.messages, 400
+            gunpla = gunpla_schema.load(gunpla_json)
         else:
             gunpla.model = gunpla_json['model']
             gunpla.serie_id = gunpla_json['serie_id']

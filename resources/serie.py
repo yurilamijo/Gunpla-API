@@ -6,7 +6,6 @@ from flask_jwt_extended import (
         get_jwt_claims, 
         get_jwt_identity
     )
-from marshmallow import ValidationError
 
 from schemas.serie import SerieSchema
 from models.serie import SerieModel

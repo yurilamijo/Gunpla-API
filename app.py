@@ -1,6 +1,7 @@
 from config.db import db
 from flask import Flask, jsonify
 from flask_restful import Api
+from marshmallow import ValidationError
 
 from config.ma import ma
 from config.jwt_config import jwt_init
@@ -15,6 +16,10 @@ api = Api(app)
 @app.before_first_request
 def create_tables():
     db.create_all()
+
+@app.errorhandler(ValidationError)
+def handle_marshmallow_validation(err):
+    return jsonify(err.messages), 400
 
 jwt_init(app)
 
