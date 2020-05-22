@@ -2,8 +2,10 @@ Flask
 Flask-RESTful
 Flask-JWT-Extended
 FLask-SQLAlchemy
+flask-uploads
 flask-marshmallow
-uwsgi
-psycopg2
 marshmallow
 marshmallow-sqlalchemy
+uwsgi
+psycopg2
+python-dotenv
