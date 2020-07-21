@@ -2,6 +2,7 @@ from config.db import db
 from flask import Flask, jsonify
 from flask_restful import Api
 from marshmallow import ValidationError
+from flask_uploads import configure_uploads, patch_request_class
 from dotenv import load_dotenv
 
 from config.ma import ma
@@ -9,11 +10,15 @@ from config.jwt_config import jwt_init
 from resources.gunpla import Gunpla, GunplaList
 from resources.serie import Serie, SerieList
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
+from resources.image import ImageUpload
+from libs.image_helper import IMAGE_SET 
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)
 app.config.from_object('development_config')
 app.config.from_envvar('APPLICATION_SETTINGS')
+patch_request_class(app, 10 * 1024 * 1024) # 10MB max size upload
+configure_uploads(app, IMAGE_SET)
 api = Api(app)
 
 @app.before_first_request
@@ -38,8 +43,10 @@ api.add_resource(GunplaList, '/gunplas')
 # Serie calls
 api.add_resource(Serie, '/serie/<string:name>')
 api.add_resource(SerieList, '/series')
+# Image calls
+api.add_resource(ImageUpload, "/upload/image")
 
 if __name__ == '__main__':
     db.init_app(app)
     ma.init_app(app)
-    app.run(debug=True)
+    app.run()
