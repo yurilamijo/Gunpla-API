@@ -29,9 +29,10 @@ class Gunpla(Resource):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
         
         gunpla_json = request.get_json()
-        gunpla_json["name"] = name
+        gunpla_json['name'] = name
 
         gunpla = gunpla_schema.load(gunpla_json)
+        
         gunpla.add()
 
         return gunpla_schema.dump(gunpla), 201

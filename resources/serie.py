@@ -28,7 +28,10 @@ class Serie(Resource):
         if SerieModel.find_by_name(name):
             return {'message': f'An Serie with the name {name} already exists'}, 400
         
-        serie = SerieModel(name=name)
+        serie_json = request.get_json()
+        serie_json["name"] = name
+
+        serie = serie_schema.load(serie_json)
         serie.add()
 
         return serie_schema.dump(serie), 201

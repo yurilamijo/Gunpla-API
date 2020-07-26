@@ -4,6 +4,7 @@ Flask-JWT-Extended
 FLask-SQLAlchemy
 Flask-Reuploaded
 flask-marshmallow
+flask-migrate
 marshmallow
 marshmallow-sqlalchemy
 uwsgi

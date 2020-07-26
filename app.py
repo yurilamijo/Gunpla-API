@@ -1,6 +1,7 @@
 from config.db import db
 from flask import Flask, jsonify
 from flask_restful import Api
+from flask_migrate import Migrate
 from marshmallow import ValidationError
 from flask_uploads import configure_uploads, patch_request_class
 from dotenv import load_dotenv
@@ -30,6 +31,7 @@ def handle_marshmallow_validation(err):
     return jsonify(err.messages), 400
 
 jwt_init(app)
+migrate = Migrate(app, db)
 
 # User calls
 api.add_resource(UserRegister, '/register')
@@ -47,7 +49,7 @@ api.add_resource(SerieList, '/series')
 api.add_resource(ImageUpload, "/upload/image")
 api.add_resource(Image, "/image/<string:filename>")
 
+db.init_app(app)
 if __name__ == '__main__':
-    db.init_app(app)
     ma.init_app(app)
     app.run()
