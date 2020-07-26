@@ -1,7 +1,9 @@
 from flask_restful import Resource
 from flask_uploads import UploadNotAllowed
-from flask import request
+from flask import send_file, request
 from flask_jwt_extended import jwt_required, get_jwt_identity
+import traceback
+import os
 
 from libs import image_helper
 from schemas.image import ImageSchema
@@ -15,8 +17,8 @@ class ImageUpload(Resource):
         Used to upload an image (png, jpeg)
         """
         data = image_schema.load(request.files)
-        user_id = get_jwt_identity()
-        folder = f"gunpals"
+        # user_id = get_jwt_identity()
+        folder = "gunpals"
         try:
             image_path = image_helper.save_image(data["image"], folder=folder)
             basename = image_helper.get_basename(image_path)
@@ -24,4 +26,24 @@ class ImageUpload(Resource):
         except UploadNotAllowed:
             extension = image_helper.get_extension(data["image"])
             return {"message": f"Extension {extension} not allowed"}, 400
-        
+
+class Image(Resource):
+    @jwt_required 
+    def get(self, filename: str):
+        """
+        Returns the requested image if it exists
+        """
+        # user_id = get_jwt_identity()
+        folder = "gunpals"
+        if not image_helper.is_filename_safe(filename):
+            return {"message":"Illegal filename"}, 400
+        print(filename)
+        print(image_helper.get_path(filename, folder=folder))
+        try:
+            return send_file(image_helper.get_path(filename, folder=folder))
+        except FileNotFoundError:
+            return {"message":"Image not found"}, 404
+
+    @jwt_required
+    def delete(self, filename: str):
+        pass

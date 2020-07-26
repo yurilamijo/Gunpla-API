@@ -10,7 +10,7 @@ from config.jwt_config import jwt_init
 from resources.gunpla import Gunpla, GunplaList
 from resources.serie import Serie, SerieList
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
-from resources.image import ImageUpload
+from resources.image import ImageUpload, Image
 from libs.image_helper import IMAGE_SET 
 
 app = Flask(__name__)
@@ -45,6 +45,7 @@ api.add_resource(Serie, '/serie/<string:name>')
 api.add_resource(SerieList, '/series')
 # Image calls
 api.add_resource(ImageUpload, "/upload/image")
+api.add_resource(Image, "/image/<string:filename>")
 
 if __name__ == '__main__':
     db.init_app(app)
