@@ -33,12 +33,10 @@ class Image(Resource):
         """
         Returns the requested image if it exists
         """
-        # user_id = get_jwt_identity()
         folder = "gunpals"
         if not image_helper.is_filename_safe(filename):
             return {"message":"Illegal filename"}, 400
-        print(filename)
-        print(image_helper.get_path(filename, folder=folder))
+
         try:
             return send_file(image_helper.get_path(filename, folder=folder))
         except FileNotFoundError:
@@ -46,4 +44,18 @@ class Image(Resource):
 
     @jwt_required
     def delete(self, filename: str):
-        pass
+        """
+        Deletes the requested image
+        """        
+        folder = "gunpals"
+        if not image_helper.is_filename_safe(filename):
+            return {"message":"Illegal filename"}, 400
+        
+        try:
+            os.remove(image_helper.get_path(filename, folder=folder))
+            return {"message":f"Image {filename} deleted"}, 200
+        except FileNotFoundError:
+            return {"message":"Image not found"}, 404
+        except:
+            traceback.print_exc();
+            return {"message":"Internal server error"}
