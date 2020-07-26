@@ -11,3 +11,4 @@ class SerieSchema(ma.SQLAlchemyAutoSchema):
         model = SerieModel
         dump_only = ('id',)
         include_fk = True
+        load_instance = True

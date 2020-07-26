@@ -28,8 +28,8 @@ class Gunpla(Resource):
         if GunplaModel.find_by_name(name):
             return {'message': f'An Gunpla with the name {name} already exists'}, 400
         
-        gunpla_json = request.json()
-        gunpla_json['name'] = name
+        gunpla_json = request.get_json()
+        gunpla_json["name"] = name
 
         gunpla = gunpla_schema.load(gunpla_json)
         gunpla.add()
@@ -38,7 +38,7 @@ class Gunpla(Resource):
 
     @classmethod
     def put(cls, name: str):
-        gunpla_json = request.json()
+        gunpla_json = request.get_json()
         gunpla = GunplaModel.find_by_name(name)
 
         if gunpla is None:
