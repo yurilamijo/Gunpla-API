@@ -5,28 +5,36 @@ Database build with sqlite3 and postgresql.<br>
 Launched in Heruko.
 
 ## Getting Started
-
 Setup virual enviroment
 ```
 pip install virtualenv
 
 virtualenv venv
+```
 
 # Mac OS
+```
 source ./venv/bin/activate
+```
 
 # Windows
+```
 .\venv\Scripts\activate
 ```
 
+# Installation
 Install packages
 ```
 pip install -r requirements.txt
 ```
 
+* Setup .env
+
 Run it
 ```
 python app.py
+OR
+flask run
 ```
 
 ## API calls
@@ -43,6 +51,11 @@ Serie
 *   POST    http://127.0.0.1:5000/series/{name}
 *   DELETE  http://127.0.0.1:5000/series/{name}
 
+Image
+*   GET     http://127.0.0.1:5000/image/{name}
+*   POST    http://127.0.0.1:5000/upload/image
+*   DELETE  http://127.0.0.1:5000/image/{name}
+
 User
 *   POST    http://127.0.0.1:5000/login
 *   POST    http://127.0.0.1:5000/logout
@@ -55,18 +68,22 @@ User
 ### Python packages
 *   autopep8 
 *   Flask 
-*   Flask-JWT 
+*   Flask-JWT-Extended 
 *   Flask-RESTful 
 *   Flask-SQLAlchemy 
-*   PyJWT-Extended 
-*   pylint 
+*   Flask-Reuploaded
+*   flask-migrate
+*   flask-marshmallow
+*   marshmallow
+*   marshmallow-sqlalchemy
 *   SQLAlchemy 
+*   Flake8 
 
 ### Tools
-* Heruko
-* Postman
-* Cloudflare
+*   Heruko
+*   Postman
+*   Cloudflare
+*   PGAdmin
 
 ## Authors
-
 * **Yuri Lamijo** - *Developer* - [Yuri Lamijo](...)
