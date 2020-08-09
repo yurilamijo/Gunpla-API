@@ -4,6 +4,7 @@ from models.serie import SerieModel
 from models.gunpla import GunplaModel
 from schemas.gunpla import GunplaSchema
 
+
 class SerieSchema(ma.SQLAlchemyAutoSchema):
     gunplas = ma.Nested(GunplaSchema, many=True)
     

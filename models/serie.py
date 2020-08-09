@@ -1,6 +1,7 @@
 from typing import List
 from config.db import db
 
+
 class SerieModel(db.Model):
     __tablename__ = 'series'
 
@@ -21,15 +22,15 @@ class SerieModel(db.Model):
         return cls.query.all()
     
     def add(self):
-        try :
+        try:
             db.session.add(self)
             db.session.commit()
-        except:
+        except Exception:
             return {'message': 'An error occured while creating the serie'}, 500
     
     def delete(self):
-        try :
+        try:
             db.session.delete(self)
             db.session.commit()
-        except:
+        except Exception:
             return {'message': 'An error occured while deleting the serie'}, 500

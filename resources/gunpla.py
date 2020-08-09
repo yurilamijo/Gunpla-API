@@ -1,18 +1,17 @@
 from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import (
-        jwt_required, 
-        jwt_optional, 
-        get_jwt_claims,
-        get_jwt_identity, 
-        fresh_jwt_required
-    )
-
+    jwt_required, 
+    jwt_optional, 
+    get_jwt_claims,
+    get_jwt_identity
+)
 from schemas.gunpla import GunplaSchema
 from models.gunpla import GunplaModel
 
 gunpla_schema = GunplaSchema()
 gunpla_list_schema = GunplaSchema(many=True)
+
 
 class Gunpla(Resource):
    
@@ -69,6 +68,7 @@ class Gunpla(Resource):
             return {'message': f'Gunpla {name} deleted'}
         return {'message': f"An Gunpla with the name {name} doesn't exsits"}, 401
 
+
 class GunplaList(Resource):
     @classmethod
     @jwt_optional
@@ -78,6 +78,6 @@ class GunplaList(Resource):
         if user_id:
             return {'gunplas': gunplas}, 200
         return {
-                'gunplas': [gunpla['name'] for gunpla in gunplas],
-                'message': 'Log in to see more details'
-            }, 200
+            'gunplas': [gunpla['name'] for gunpla in gunplas],
+            'message': 'Log in to see more details'
+        }, 200

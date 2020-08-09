@@ -1,5 +1,5 @@
-from typing import Dict
 from config.db import db
+
 
 class UserModel(db.Model):
     __tablename__ = 'users'
@@ -16,14 +16,14 @@ class UserModel(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
-        except:
+        except Exception:
             return {'message': 'An error occurred while creating the user'}, 500
 
     def delete_from_db(self):
         try:
             db.session.delete(self)
             db.session.commit()
-        except:
+        except Exception:
             return {'message': 'An error occurred while deleting the user'}, 500
 
     @classmethod

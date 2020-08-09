@@ -18,17 +18,20 @@ app = Flask(__name__)
 load_dotenv(".env", verbose=True)
 app.config.from_object('development_config')
 app.config.from_envvar('APPLICATION_SETTINGS')
-patch_request_class(app, 10 * 1024 * 1024) # 10MB max size upload
+patch_request_class(app, 10 * 1024 * 1024)  # 10MB max size upload
 configure_uploads(app, IMAGE_SET)
 api = Api(app)
+
 
 @app.before_first_request
 def create_tables():
     db.create_all()
 
+
 @app.errorhandler(ValidationError)
 def handle_marshmallow_validation(err):
     return jsonify(err.messages), 400
+
 
 jwt_init(app)
 migrate = Migrate(app, db)

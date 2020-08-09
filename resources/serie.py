@@ -1,17 +1,18 @@
 from flask import request
 from flask_restful import Resource, reqparse
 from flask_jwt_extended import (
-        jwt_optional, 
-        jwt_required, 
-        get_jwt_claims, 
-        get_jwt_identity
-    )
+    jwt_optional, 
+    jwt_required, 
+    get_jwt_claims, 
+    get_jwt_identity
+)
 
 from schemas.serie import SerieSchema
 from models.serie import SerieModel
 
 serie_schema = SerieSchema()
 serie_list_schema = SerieSchema(many=True)
+
 
 class Serie(Resource):
     parser = reqparse.RequestParser()
@@ -21,7 +22,7 @@ class Serie(Resource):
         serie = SerieModel.find_by_name(name)
         if serie:
             return serie_schema.dump(serie), 201
-        return {'message': 'Serie not found'}, 404
+        return {'message': 'Serie not found'}, 404            
     
     @classmethod
     def post(cls, name: str):
@@ -38,7 +39,7 @@ class Serie(Resource):
 
     @classmethod
     @jwt_required
-    def delete(cls, name:str):
+    def delete(cls, name: str):
         claims = get_jwt_claims()
         if not claims['is_admin']:
             return {'message': 'Admin privilege required'}, 401
@@ -49,6 +50,7 @@ class Serie(Resource):
             return {'message': f'The serie {name} is deleted'}
         return {'message': f"The serie {name} doesn't exist"}
 
+
 class SerieList(Resource):
     @classmethod
     @jwt_optional
@@ -58,6 +60,6 @@ class SerieList(Resource):
         if user_id:
             return {'series': series}, 200
         return {
-                'series': [serie['name'] for serie in series],
-                'message': 'Log in to see more details'
-            }, 200
+            'series': [serie['name'] for serie in series],
+            'message': 'Log in to see more details'
+        }, 200

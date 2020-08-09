@@ -1,6 +1,6 @@
 from typing import List
-
 from config.db import db
+
 
 class GunplaModel(db.Model):
     __tablename__ = 'gunplas'
@@ -37,12 +37,12 @@ class GunplaModel(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
-        except:
+        except Exception:
             return {'message': 'An error occured while creating the gunpla'}, 500
 
     def delete(self):
         try:
             db.session.delete(self)
             db.session.commit()
-        except:
+        except Exception:
             return {'message': 'An error occured while deleting the gunpla'}, 500

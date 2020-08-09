@@ -3,6 +3,7 @@ from config.ma import ma
 from models.gunpla import GunplaModel
 from models.serie import SerieModel
 
+
 class GunplaSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = GunplaModel

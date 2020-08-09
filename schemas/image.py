@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields
 from werkzeug.datastructures import FileStorage
 
+
 # Custom field
 class FileStorageField(fields.Field):
     default_error_messages = {
@@ -15,6 +16,7 @@ class FileStorageField(fields.Field):
             self.fail('invaild')
 
         return value
+
 
 class ImageSchema(Schema):
     image = FileStorageField(required=True)
