@@ -1,9 +1,8 @@
 import os
 
-ENV = 'development'  
+ENV = 'development'
 DEBUG = True
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:yuri_root@localhost:5432/gunpla-api'
-# SQLALCHEMY_DATABASE_URI = 'sqlite:///data.db'
+SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URI', 'sqlite:///data.db')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 PROPAGATE_EXCEPTIONS = True
 JWT_BLACKLIST_ENABLED = True

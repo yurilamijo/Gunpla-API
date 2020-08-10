@@ -6,11 +6,7 @@ class UserModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(120), nullable=False)
-
-    # def __init__(self, username: str, password: str):
-    #     self.username = username
-    #     self.password = password
+    password = db.Column(db.String(225), nullable=False)
 
     def save_to_db(self):
         try:

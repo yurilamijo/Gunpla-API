@@ -1,10 +1,11 @@
 Flask
 Flask-RESTful
 Flask-JWT-Extended
-FLask-SQLAlchemy
+Flask-SQLAlchemy
 Flask-Reuploaded
 flask-marshmallow
 flask-migrate
+SQLAlchemy
 marshmallow
 marshmallow-sqlalchemy
 uwsgi

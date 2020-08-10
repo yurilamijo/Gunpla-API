@@ -12,7 +12,7 @@ from resources.gunpla import Gunpla, GunplaList
 from resources.serie import Serie, SerieList
 from resources.user import UserRegister, User, UserLogin, UserLogout, TokenRefresh
 from resources.image import ImageUpload, Image
-from libs.image_helper import IMAGE_SET 
+from libs.image_helper import IMAGE_SET
 
 app = Flask(__name__)
 load_dotenv(".env", verbose=True)
