@@ -1,15 +1,14 @@
 from config.ma import ma
 
-from models.serie import SerieModel
+from models.gunpla import GradeModel
 from models.gunpla import GunplaModel
 from schemas.gunpla import GunplaSchema
 
 
-class SerieSchema(ma.SQLAlchemyAutoSchema):
+class GradeSchema(ma.SQLAlchemyAutoSchema):
     gunplas = ma.Nested(GunplaSchema, many=True)
-    
+
     class Meta:
-        model = SerieModel
-        dump_only = ('id',)
+        model = GradeModel
         include_fk = True
         load_instance = True

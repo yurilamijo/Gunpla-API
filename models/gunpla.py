@@ -8,11 +8,14 @@ class GunplaModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(225), nullable=False, unique=True)
     model = db.Column(db.String(80), nullable=False)
-    grade = db.Column(db.String(20), nullable=False)
+    # grade = db.Column(db.String(20), nullable=False)
     scale = db.Column(db.String(20), nullable=True)
     price = db.Column(db.Float(precision=2), nullable=False)
     release_date = db.Column(db.DateTime(), nullable=True)
     brand = db.Column(db.String(40), nullable=True)
+
+    grade_code = db.Column(db.String(20), db.ForeignKey('grades.code'), nullable=False)
+    grade = db.relationship('GradeModel')
 
     serie_id = db.Column(db.Integer, db.ForeignKey('series.id'), nullable=False)
     serie = db.relationship('SerieModel')

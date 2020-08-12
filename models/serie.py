@@ -17,7 +17,7 @@ class SerieModel(db.Model):
     def find_by_name(cls, name: str) -> "SerieModel":
         return cls.query.filter_by(name=name).first()
 
-    @classmethod 
+    @classmethod
     def find_all(cls) -> List["SerieModel"]:
         return cls.query.all()
     

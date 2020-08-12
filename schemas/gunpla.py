@@ -2,6 +2,7 @@ from config.ma import ma
 
 from models.gunpla import GunplaModel
 from models.serie import SerieModel
+from models.grade import GradeModel
 
 
 class GunplaSchema(ma.SQLAlchemyAutoSchema):
